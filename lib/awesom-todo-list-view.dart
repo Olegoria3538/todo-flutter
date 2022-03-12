@@ -25,8 +25,7 @@ class _AwesomeTodoView extends State<AwesomeTodoView> {
     }
   }
 
-  void checkTask(int index) {
-    getTodoFromDb();
+  void toggleTask(int index) {
     setState(() {
       todo.toggleTask(index);
     });
@@ -60,7 +59,7 @@ class _AwesomeTodoView extends State<AwesomeTodoView> {
           return
                 Row(
                   children: [
-                    Checkbox(value: el.isCheck, onChanged: (_) => {checkTask(i)}, ),
+                    Checkbox(value: el.isCheck, onChanged: (_) => {toggleTask(i)}, ),
                     Text(
                       el.text + (el.time != null ? (' (' + el.time.toString() + ')') : ''),
                       style: TextStyle( fontSize: 20 ),
