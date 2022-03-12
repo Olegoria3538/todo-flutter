@@ -6,17 +6,6 @@ import 'package:untitled/task.dart';
 
 import 'add-task.dart';
 
-class TodoList {
-  List<Task> tasks = [];
-  void addTask(String x) {
-    var task = Task(text: x);
-    tasks.add(task);
-  }
-  int getTaskLen() {
-    return tasks.length;
-  }
-}
-
 class AwesomeTodoView extends StatefulWidget {
   static const id = "main";
   const AwesomeTodoView({Key? key}) : super(key: key);
@@ -48,7 +37,7 @@ class _AwesomeTodoView extends State<AwesomeTodoView> {
       }),
       persistentFooterButtons: [
         RaisedButton(
-          child:Text("Button"),
+          child:Text("Add task"),
           onPressed: addTodo,
         )
       ],
