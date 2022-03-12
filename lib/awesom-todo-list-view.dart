@@ -1,9 +1,6 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:untitled/task.dart';
-
+import 'package:untitled/todo-list-controller.dart';
+import 'package:untitled/db-controller.dart';
 import 'add-task.dart';
 
 class AwesomeTodoView extends StatefulWidget {
@@ -16,29 +13,66 @@ class AwesomeTodoView extends StatefulWidget {
 
 class _AwesomeTodoView extends State<AwesomeTodoView> {
   var todo = TodoList();
-  void addTodo() async {
+  void addTask() async {
     var ats = AddTaskView();
     await Navigator.push(context, MaterialPageRoute(builder: (context) {
       return ats;
     }));
+    if(ats.text.isNotEmpty) {
+      setState(() {
+        todo.addTask(ats.text, ats.dateTime);
+      });
+    }
+  }
+
+  void checkTask(int index) {
+    getTodoFromDb();
     setState(() {
-      todo.addTask(ats.text);
+      todo.toggleTask(index);
     });
+  }
+
+  void getTodoFromDb() async {
+    var table = await db.getTable('Todo');
+    setState(() {
+      table.forEach((x) {
+        todo.addTask(x["text"], null);
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    getTodoFromDb();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("title"),
+        title: Text("Awesome todo"),
       ),
-      body: ListView.builder(itemCount: todo.getTaskLen(), itemBuilder: (context, i) {
-        return Text(todo.tasks[i].text);
-      }),
+      body:Container(
+        padding: const EdgeInsets.all(20),
+        child: ListView.builder(itemCount: todo.getTaskLen(), itemBuilder: (context, i) {
+          var el = todo.tasks[i];
+          return
+                Row(
+                  children: [
+                    Checkbox(value: el.isCheck, onChanged: (_) => {checkTask(i)}, ),
+                    Text(
+                      el.text + (el.time != null ? (' (' + el.time.toString() + ')') : ''),
+                      style: TextStyle( fontSize: 20 ),
+                    )
+                  ],
+                );
+        })
+      ),
       persistentFooterButtons: [
         RaisedButton(
           child:Text("Add task"),
-          onPressed: addTodo,
+          onPressed: addTask,
         )
       ],
     );
