@@ -21,9 +21,8 @@ class _AwesomeTodoView extends State<AwesomeTodoView> {
       return ats;
     }));
     if(ats.text.isNotEmpty) {
-      setState(() {
-        todo.addTask(ats.text, ats.dateTime);
-      });
+      await todo.addTask(ats.text, ats.dateTime);
+      setState(() { });
     }
   }
 
@@ -78,7 +77,7 @@ class _AwesomeTodoView extends State<AwesomeTodoView> {
         })
       ),
       persistentFooterButtons: [
-        RaisedButton(
+        ElevatedButton(
           child:Text("Add task"),
           onPressed: addTask,
         )

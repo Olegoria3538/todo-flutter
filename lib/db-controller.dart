@@ -17,25 +17,28 @@ class DBUtils {
   initDB() async {
     var databasesPath = await getDatabasesPath();
     String path = join(databasesPath, 'demo.db');
-    //await deleteDatabase(path);
+    // await deleteDatabase(path);
     Database database = await openDatabase(path, version: 1,
         onCreate: (Database db, int version) async {
           await db.execute(
-              'CREATE TABLE $tableName (id INTEGER PRIMARY KEY, text TEXT, isCheck BOOLEAN, time TEXT)');
+              'CREATE TABLE $tableName (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, text TEXT, isCheck BOOLEAN, time TEXT)');
     });
     return database;
   }
 
-  addInTable(int id, String text, bool isCheck, DateTime? time) async {
-    var timeFormat = time?.toIso8601String();
+  addInTable(Task task) async {
+    var map = task.toMap();
+    map["time"] = map["time"]?.toIso8601String();
+    map["id"] = null;
     final db = await database;
-    var raw = await db.rawInsert('INSERT INTO $tableName (id,text,isCheck,time) VALUES (?,?,?,?)', [id, text, isCheck, timeFormat]);
-    return raw;
+    var id = await db.insert(tableName, map);
+    return id;
   }
 
   getTable(String tableName) async {
     final db = await database;
-    return await db.query(tableName);
+    var res = await db.query(tableName);
+    return res;
   }
 
   updateTask(Task task) async {

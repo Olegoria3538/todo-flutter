@@ -48,7 +48,7 @@ class AddTaskView extends StatelessWidget {
         ),
       ),
       persistentFooterButtons: [
-        RaisedButton(
+        ElevatedButton(
             child:Text("Add task"),
             onPressed: () {
               Navigator.pop(context);

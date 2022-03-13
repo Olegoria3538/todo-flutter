@@ -1,18 +1,14 @@
 import 'package:untitled/db-controller.dart';
 import 'dart:math';
 
-int getRandomId () {
-  Random random = new Random();
-  return random.nextInt(10000000);
-}
-
 class TodoList {
   late List<Task> tasks = [];
-  void addTask(String text, DateTime? time) {
-    var id = getRandomId();
-    var task = Task(text: text, id: id, time: time);
+  Future<Task> addTask(String text, DateTime? time) async {
+    var task = Task(text: text, id: -1, time: time);
+    var id = await db.addInTable(task);
+    task.id = id;
     tasks.add(task);
-    db.addInTable(id, text, false, time);
+    return task;
   }
   void removeTask(int id) {
   tasks.removeWhere((x) => x.id == id);
@@ -42,6 +38,7 @@ class Task{
     "id": id,
     "text": text,
     "isCheck": isCheck,
+    "time": time,
   };
 }
 
