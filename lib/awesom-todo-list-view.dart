@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:untitled/todo-list-controller.dart';
 import 'package:untitled/db-controller.dart';
@@ -35,7 +37,9 @@ class _AwesomeTodoView extends State<AwesomeTodoView> {
     var table = await db.getTable('Todo');
     setState(() {
       table.forEach((x) {
-        todo.addTask(x["text"], null);
+        var isCheck = x["isCheck"] == 1 ? true : false;
+        var time = x["time"] != null ? DateTime.parse(x["time"]) : null;
+        todo.initTask(x["text"], x["id"], time, isCheck);
       });
     });
   }
@@ -56,8 +60,12 @@ class _AwesomeTodoView extends State<AwesomeTodoView> {
         padding: const EdgeInsets.all(20),
         child: ListView.builder(itemCount: todo.getTaskLen(), itemBuilder: (context, i) {
           var el = todo.tasks[i];
-          return
-                Row(
+          return Dismissible(
+                key: UniqueKey(),
+                onDismissed: (_) {
+                    todo.removeTask(el.id);
+                },
+                child: Row(
                   children: [
                     Checkbox(value: el.isCheck, onChanged: (_) => {toggleTask(i)}, ),
                     Text(
@@ -65,7 +73,8 @@ class _AwesomeTodoView extends State<AwesomeTodoView> {
                       style: TextStyle( fontSize: 20 ),
                     )
                   ],
-                );
+                )
+          );
         })
       ),
       persistentFooterButtons: [

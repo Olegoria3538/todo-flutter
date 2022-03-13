@@ -20,7 +20,7 @@ class AddTaskView extends StatelessWidget {
           children: [
             TextField(
                 onChanged: (x) => {text = x},
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Decription'
               )
             ),
@@ -49,7 +49,7 @@ class AddTaskView extends StatelessWidget {
       ),
       persistentFooterButtons: [
         RaisedButton(
-            child:Text("Button"),
+            child:Text("Add task"),
             onPressed: () {
               Navigator.pop(context);
             })
