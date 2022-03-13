@@ -5,6 +5,9 @@
 Функционал:
 Сохранение в локал бд изменений, удалений, и добавление тасок. У таски есть следующие метрики - описани (тектс), и время напоиналки. Реализации уведомления напоминалки нет.
  
+ ![v](https://user-images.githubusercontent.com/62282262/158041075-52d8ec7a-daff-41e6-b6bb-c514971c3f05.gif)
+
+ 
 ## Getting Started
 
 This project is a starting point for a Flutter application.
